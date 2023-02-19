@@ -1,6 +1,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h> 
 
+const int PIN_LED = PIN_LED;
+const int PIN_BOUTON = PIN_BOUTON;
+
 unsigned long stopTime = 0UL;
 unsigned long dureeOK = 20000UL;
 unsigned long dureeKO = 2000UL;
@@ -8,11 +11,19 @@ unsigned long dureeKO = 2000UL;
 const char *ssid = "buzzers";
 const char *password = "12345678";
 
+const char *ROUGE = "ROUGE";
+const char *BLEU = "BLEU";
+const char *VERT = "VERT";
+const char *JAUNE = "JAUNE";
+
+const char *couleurBuzzer = VERT;
+
 WiFiClient client;  // or WiFiClientSecure for HTTPS
 HTTPClient http;
 
 void get() {
   http.begin(client, "http://192.168.4.1/buzz");
+  http.addHeader("couleur", couleurBuzzer);
   int code = http.GET();
 
   // Print the response
@@ -23,9 +34,9 @@ void get() {
   }
   else {
     for (int i = 0; i < 12; i++) {
-          digitalWrite(4, HIGH); 
+          digitalWrite(PIN_LED, HIGH); 
           delay(250);
-          digitalWrite(4, LOW); 
+          digitalWrite(PIN_LED, LOW); 
           delay(250);
     }
   }
@@ -39,45 +50,45 @@ void hello() {
 }
 
 void on(int duree) {
-  digitalWrite(4, HIGH);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(PIN_LED, HIGH);   // turn the LED on (HIGH is the voltage level)
   stopTime = millis() + duree;
 }
 
 void off() {
-  digitalWrite(4, LOW);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(PIN_LED, LOW);   // turn the LED on (HIGH is the voltage level)
 }
 
 void connectToServer() {
     WiFi.begin(ssid, password);             // Connect to the network
     while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
     Serial.println("Still connecting ...");
-    digitalWrite(4, HIGH); 
+    digitalWrite(PIN_LED, HIGH); 
     delay(500);
-     digitalWrite(4, LOW); 
+     digitalWrite(PIN_LED, LOW); 
       delay(500);
       }
-       digitalWrite(4, LOW);  
+       digitalWrite(PIN_LED, LOW);  
     Serial.println("Connected !");
     Serial.println(WiFi.localIP()); 
 
 }
 
 void setup() {
-   pinMode(4, OUTPUT);
-   pinMode(13, INPUT_PULLUP);
+   pinMode(PIN_LED, OUTPUT);
+   pinMode(PIN_BOUTON, INPUT_PULLUP);
   Serial.begin(115200);
     connectToServer();
 }
 
 void loop() {
-  if (digitalRead(13) == LOW)
+  if (digitalRead(PIN_BOUTON) == LOW)
   {
     if (stopTime == 0UL) {
       get();
     }
   }
   if ((stopTime != 0UL)  && ((millis() >= stopTime))) {
-    digitalWrite(4, LOW); 
+    digitalWrite(PIN_LED, LOW); 
     stopTime = 0UL;
   }
 }
