@@ -1,11 +1,11 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h> 
 
-const int PIN_LED = PIN_LED;
-const int PIN_BOUTON = PIN_BOUTON;
+const int PIN_LED = D2;
+const int PIN_BOUTON = D7;
 
 unsigned long stopTime = 0UL;
-unsigned long dureeOK = 20000UL;
+unsigned long dureeOK = 5000UL;
 unsigned long dureeKO = 2000UL;
 
 const char *ssid = "buzzers";
@@ -16,7 +16,7 @@ const char *BLEU = "BLEU";
 const char *VERT = "VERT";
 const char *JAUNE = "JAUNE";
 
-const char *couleurBuzzer = VERT;
+const char *couleurBuzzer = JAUNE;
 
 WiFiClient client;  // or WiFiClientSecure for HTTPS
 HTTPClient http;
