@@ -14,7 +14,8 @@ const int PIN_BOUTON_MAUVAISEREPONSE = D1;
 unsigned long resetTime = 0UL;
 unsigned long tempoReset = 5000UL;
 
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(2, PIN_LED, NEO_GRB + NEO_KHZ800);
+#define NB_LED 12
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NB_LED, PIN_LED, NEO_GRB + NEO_KHZ800);
 
 const char *ssid = "buzzers";
 const char *password = "12345678";
@@ -39,22 +40,26 @@ const buzzer ROUGE = {"ROUGE", pixels.Color( 255 , 0 , 0 ),0, true};
 const buzzer JAUNE = {"JAUNE", pixels.Color( 255 , 255 , 0 ),0, true};
 const buzzer BLEU = {"BLEU", pixels.Color( 0 , 0 , 255 ),0, true};
 const buzzer VERT = {"VERT", pixels.Color( 0 , 255 , 0 ),0, true};
-const buzzer EN_ATTENTE = {"EN_ATTENTE", pixels.Color( 255 , 255 , 255 ),0, true};
+const buzzer BLANC = {"BLANC", pixels.Color( 255 , 255 , 255 ),0, true};
+const buzzer EN_ATTENTE = {"EN_ATTENTE", pixels.Color( 148 , 0 , 211 ),0, true};
 const buzzer EN_RESET = {"EN_RESET", pixels.Color( 255,0,255 ),0, true};
 const buzzer PRET_A_RESET = {"PRET_A_RESET", pixels.Color( 150,0,0 ),0, true};
 const buzzer INCONNU = {"INCONNU", pixels.Color( 0 , 0 , 0 ),0, true};
 
-#define NB_BUZZERS 4
+#define NB_BUZZERS 5
 buzzer buzzers[] = {
-  ROUGE, JAUNE, BLEU, VERT
+  ROUGE, JAUNE, BLEU, VERT, BLANC
 };   
 
 buzzer buzzerActif = EN_ATTENTE;
 
 void setBuzzerActif(buzzer buzzer) {
   buzzerActif = buzzer;
-  pixels.setPixelColor(0, buzzerActif.couleurRGB );
-  pixels.setPixelColor(1, buzzerActif.couleurRGB );
+  for (int t=0; t<NB_LED; t++)
+   {
+     pixels.setPixelColor(t, buzzerActif.couleurRGB );
+   }
+
   pixels.show();
 }
 
