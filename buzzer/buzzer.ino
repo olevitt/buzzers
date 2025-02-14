@@ -20,7 +20,7 @@ const char *BLANC = "BLANC";
 
 
 
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN_LED, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(2, PIN_LED, NEO_GRB + NEO_KHZ800);
 
 int pixelOff = pixels.Color( 0, 0 , 0 );
 int pixelOn = pixels.Color( 255 , 0 , 0 ); // Rouge
@@ -48,6 +48,7 @@ void get() {
   else {
     for (int i = 0; i < 12; i++) {
           pixels.setPixelColor(0, pixelOn );
+          pixels.setPixelColor(1, pixelOn );
           pixels.show();
           delay(250);
           off();
@@ -65,12 +66,14 @@ void hello() {
 
 void on(int duree) {
   pixels.setPixelColor(0, pixelOn);
+  pixels.setPixelColor(1, pixelOn );
   pixels.show();
   stopTime = millis() + duree;
 }
 
 void off() {
   pixels.setPixelColor(0, pixelOff);
+  pixels.setPixelColor(1, pixelOff);
   pixels.show();
 }
 
@@ -79,6 +82,7 @@ void connectToServer() {
     while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
     Serial.println("Still connecting ...");
     pixels.setPixelColor(0, pixelOn);
+    pixels.setPixelColor(1, pixelOn);
     pixels.show();
     delay(500);
     off();
